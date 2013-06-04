@@ -66,8 +66,9 @@ if (Meteor.isClient) {
           message: $(e.target).siblings('.message-text').text(),
           parentId: $(e.target).parent()[0].id,
           branchId: nextBranch,
-          owner: Meteor.userId(),
-          username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+          owner: Meteor.userId(), // 'true owner' of this duplicate is brancher, not necessarily orig message author
+          // owner: $(e.target).siblings('.owner').val()       <-- this is optimal, but permissions don't allow it
+          username: $(e.target).siblings('.username').text(), // copy over username instead of do lookup
           timestamp: new Date});
         return false;
       }
