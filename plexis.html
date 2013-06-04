@@ -1,22 +1,51 @@
 <head>
-  <title>plexis</title>
+	<title>plexis</title>
 </head>
 
 <body>{{> page}}</body>
 
 <template name="page">
-	<div id="login" style="float: right;">
-		{{loginButtons align="right"}}
-	</div>
+	<div id="login" style="float: right;">{{> login}}</div>
+	<div id="user">{{> user}}</div>
 	<div id="chat">{{> chat}}</div>
+	<div id="register">{{> register}}</div>
+	<div id="logout">{{> logout}}</div>
+</template>
+
+<template name="user">
+	User: {{user}}
+</template>
+
+<template name="logout">
+	<input type="submit" id="sign-out" value="Sign out" />
 </template>
 
 <template name="chat">
 
 	{{#each chat}}
-		<p>{{username}}: {{message}}</p>
+	<li>{{username}}: {{message}}</li>
 	{{/each}}
+
 
 	<input id="message" type="text" placeholder="Type message here"/>
 	<input id="submit" type="submit"/>
+</template>
+
+<template name="register">
+	<div class="register-form">
+		<input type="email" placeholder="email" id="account-email" />
+		<input type="password" placeholder="password" id="account-password" />
+		<input type="full-name" placeholder="screen name" id="account-name" />
+		<input type="submit" id="create-account" value="Create an Account" />
+	</div>
+</template>
+
+<template name="login">
+	<div class="login-form">    
+		<input type="email" placeholder="email" id="login-email" />
+		<input type="password" placeholder="password" id="login-password" />
+		<input type="submit" id="login-button" value="Sign in" />
+		or
+		<input type="submit" id="create-user" value="Sign up" />
+	</div>
 </template>
