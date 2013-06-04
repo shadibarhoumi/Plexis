@@ -1,0 +1,22 @@
+<head>
+  <title>plexis</title>
+</head>
+
+<body>{{> page}}</body>
+
+<template name="page">
+	<div id="login" style="float: right;">
+		{{loginButtons align="right"}}
+	</div>
+	<div id="chat">{{> chat}}</div>
+</template>
+
+<template name="chat">
+
+	{{#each chat}}
+		<p>{{username}}: {{message}}</p>
+	{{/each}}
+
+	<input id="message" type="text" placeholder="Type message here"/>
+	<input id="submit" type="submit"/>
+</template>
