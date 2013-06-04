@@ -1,5 +1,14 @@
 // both client and server code here
 
+function getHashtag (message) {
+  hashtag = message.split(/[#]+/).pop().toLowerCase()
+  if !(message.split(/[#]+/).length === 1) {
+    return hashtag
+  }
+  else {
+    return null
+  }
+}
 
 if (Meteor.isClient) {
 
