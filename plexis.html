@@ -7,7 +7,7 @@
 <template name="page">
 	<div id="login" style="float: right;">{{> login}}</div>
 	<div id="user">{{> user}}</div>
-	<div id="chat">{{> chat}}</div>
+	<div id="conversation">{{> conversation}}</div>
 	<div id="register">{{> register}}</div>
 	<div id="logout">{{> logout}}</div>
 </template>
@@ -18,9 +18,29 @@
 
 <template name="logout">
 	<input type="submit" id="sign-out" value="Sign out" />
+
 </template>
 
-<template name="chat">
+<template name="conversation">
+	
+	{{#if branches}}
+		{{#each branches}}
+			<div class="branch" data-branchid="{{branchId}}">
+				BRANCH {{branchId}}
+			{{#each messages}}
+				 <li id="{{_id}}" data-parentid="{{parentId}}" data-branchId="{{branchId}}"><span class="username">{{username}}</span>: <span class="message-text">{{message}}</span> <span class="time">At {{timestamp}}</span> <input type="hidden" class="owner" value={{owner}}> <a class="branch-link" href="#">Branch</a></li>
+			{{/each}}
+				<input id="message-branch-{{branchId}}" class="message" type="text" placeholder="Type message here"/>
+				<input id="submit-branch-{{branchId}}" class="submit" type="submit"/>
+			</div>
+		{{/each}}
+	{{else}}
+		<div class="branch" data-branchid="0">
+			<p id="notice">Get this chat started</p>
+			<input id="message-branch-0" class="message" type="text" placeholder="Type message here"/>
+			<input id="submit-branch-0" class="submit" type="submit"/>
+		</div>
+	{{/if}}
 
 	{{#each chat}}
 	<li>{{username}}: {{message}}</li>
@@ -49,3 +69,4 @@
 		<input type="submit" id="create-user" value="Sign up" />
 	</div>
 </template>
+
