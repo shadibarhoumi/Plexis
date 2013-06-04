@@ -18,7 +18,7 @@
 			<div class="branch" data-branchid="{{branchId}}">
 				BRANCH {{branchId}}
 			{{#each messages}}
-				 <li id="{{_id}}" data-parentid="{{parentId}}" data-branchId="{{branchId}}"><span class="username">{{username}}</span>: <span class="message-text">{{message}}</span> | id: {{_id}} | parentId: {{parentId}} | branchId: {{branchId}} | <span class="time">At {{timestamp}}</span> <input type="hidden" class="owner" value={{owner}}> <a class="branch-link" href="#">Branch</a></li>
+				 <li id="{{_id}}" data-parentid="{{parentId}}" data-branchId="{{branchId}}"><span class="username">{{username}}</span>: <span class="message-text">{{message}}</span> <span class="time">At {{timestamp}}</span> <input type="hidden" class="owner" value={{owner}}> <a class="branch-link" href="#">Branch</a></li>
 			{{/each}}
 				<input id="message-branch-{{branchId}}" class="message" type="text" placeholder="Type message here"/>
 				<input id="submit-branch-{{branchId}}" class="submit" type="submit"/>
