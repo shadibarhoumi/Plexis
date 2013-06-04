@@ -67,7 +67,8 @@ if (Meteor.isClient) {
             parentId: $(e.target).prev()[0].id,
             branchId: $(e.target).parent().data('branchid'),
             owner: Meteor.userId(),
-            username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+            //username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+            username: Template.user.user(),
             timestamp: new Date});
           $('.message').val('');
         } else {
@@ -85,7 +86,8 @@ if (Meteor.isClient) {
           parentId: $message.prev()[0].id,
           branchId: $(e.target).parent().data('branchid'),
           owner: Meteor.userId(),
-          username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+          //username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+          username: Template.user.user(),
           timestamp: new Date});
         $message.val('');
       } else {
