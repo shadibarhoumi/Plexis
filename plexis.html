@@ -8,15 +8,28 @@
 	<div id="login" style="float: right;">
 		{{loginButtons align="right"}}
 	</div>
-	<div id="chat">{{> chat}}</div>
+	<div id="conversation">{{> conversation}}</div>
 </template>
 
-<template name="chat">
+<template name="conversation">
+	
+	{{#if branches}}
+		{{#each branches}}
+			<div class="branch" data-branchid="{{branchId}}">
+				BRANCH {{branchId}}
+			{{#each messages}}
+				 <li id="{{_id}}" data-parentid="{{parentId}}" data-branchId="{{branchId}}">{{username}}: <span class="message-text">{{message}}</span> | id: {{_id}} | parentId: {{parentId}} | branchId: {{branchId}} | <a class="branch-link" href="#">Branch</a></li>
+			{{/each}}
+				<input id="message-branch-{{branchId}}" class="message" type="text" placeholder="Type message here"/>
+				<input id="submit-branch-{{branchId}}" class="submit" type="submit"/>
+			</div>
+		{{/each}}
+	{{else}}
+		<div class="branch" data-branchid="0">
+			<p id="notice">Get this chat started</p>
+			<input id="message-branch-0" class="message" type="text" placeholder="Type message here"/>
+				<input id="submit-branch-0" class="submit" type="submit"/>
+		</div>
+	{{/if}}
 
-	{{#each chat}}
-		<p>{{username}}: {{message}}</p>
-	{{/each}}
-
-	<input id="message" type="text" placeholder="Type message here"/>
-	<input id="submit" type="submit"/>
 </template>
