@@ -26,6 +26,14 @@
 
 if (Meteor.isClient) {
 
+  Template.users.email = function(id) {
+    return Meteor.users.find({_id: id}).emails[0].address;
+  }
+
+  Template.users.users = function() {
+      return Meteor.users.find({}).fetch();
+  }
+
   Template.conversation.branches = function() {
     var messages = Messages.find({}, {sort: [["branchId", "asc"], ["timestamp", "asc"]]}).fetch();
     var branches = []
@@ -44,12 +52,24 @@ if (Meteor.isClient) {
     return branches;
   };
 
+  Template.conversation.numberBranches = function() {
+    // return index of last branch
+    var messages = Messages.find({}, {sort: [["branchId", "desc"]]}).fetch();
+    var lastBranchIndex = parseInt(messages[0].branchId);
+    return lastBranchIndex + 1;
+  }
+
+  Template.conversation.isMine = function(owner) {
+    return owner === Meteor.userId();
+  }
+
   Template.user.user = function() {
     if(Meteor.user()) {
       return Meteor.user().username;
     }
     
   };
+
 
   Template.logout.events({
     'click #sign-out': function() {
@@ -61,11 +81,12 @@ if (Meteor.isClient) {
   Template.conversation.events({
     'keyup .message': function(e) {
       if (e.keyCode === 13) {
-        if (Meteor.user()) {
+        if (Meteor.user() ) {
           console.log('putting stuff in database in keyup .message');
           Messages.insert({message: $(e.target).val(),
-            parentId: $(e.target).prev()[0].id,
-            branchId: $(e.target).parent().data('branchid'),
+            //parentId: $(e.target).prev()[0].id,
+            parentId: $(e.target).parent().prev()[0].id,
+            branchId: $(e.target).parent().parent().data('branchid'),
             owner: Meteor.userId(),
             //username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
             username: Template.user.user(),
@@ -98,8 +119,8 @@ if (Meteor.isClient) {
 
     'click .branch-link': function(e) {
         // optimize this so we don't have to do another lookup
-        var messages = Messages.find({}, {sort: [["branchId", "desc"]]}).fetch();
-        var nextBranch = parseInt(messages[0].branchId) + 1;
+        // don't add one because number branches returns lastBranchIndex + 1
+        var nextBranch = Template.conversation.numberBranches();
 
         Messages.insert({
           message: $(e.target).siblings('.message-text').text(),
@@ -130,6 +151,7 @@ Template.register.events({
               $('#account-email').val('');
               $('#account-name').val('');
               $('#account-password').val('');
+              $('.register-form').css("display", "none");
 
               // Success. Account has been created and the user
               // has logged in successfully. 
@@ -164,6 +186,7 @@ Template.login.events({
               // login attempt has failed. 
               else {
                 console.log('you\'ve earn an Internet logged in');
+
                 //Notifications.insert({text: 'Login Success!', type: 'login-success', ttl: 1});
               }
             });
