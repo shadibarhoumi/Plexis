@@ -81,7 +81,7 @@ if (Meteor.isClient) {
   Template.conversation.events({
     'keyup .message': function(e) {
       if (e.keyCode === 13) {
-        if (Meteor.user() ) {
+        if (Meteor.user() && $(e.target).val() !== "") {
           console.log('putting stuff in database in keyup .message');
           Messages.insert({message: $(e.target).val(),
             //parentId: $(e.target).prev()[0].id,
@@ -89,9 +89,12 @@ if (Meteor.isClient) {
             branchId: $(e.target).parent().parent().data('branchid'),
             owner: Meteor.userId(),
             //username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+            branchName: $(e.target).val().split(/\b/)[0],
             username: Template.user.user(),
-            timestamp: new Date});
+            timestamp: Date.now()});
           $('.message').val('');
+        } else if ($(e.target).val() === "") {
+          console.log('no text!');
         } else {
           alert('you must be logged in to do this!');
         }
@@ -100,19 +103,23 @@ if (Meteor.isClient) {
     },
 
     'click .submit': function(e) {
-      if (Meteor.user()) {
-        var $message = $(e.target).siblings('.message')
+      var $message = $(e.target).siblings('.message');
+      if (Meteor.user() && $message.val() !== "") {
         console.log('putting stuff in database in click .submit');
+        
         Messages.insert({message: $message.val(),
           parentId: $message.prev()[0].id,
           branchId: $(e.target).parent().data('branchid'),
           owner: Meteor.userId(),
           //username: Meteor.user().emails[0].address.replace(/\@.*$/, ''),
+          branchName: $message.val().split(/\b/)[0],
           username: Template.user.user(),
-          timestamp: new Date});
+          timestamp: Date.now()});
         $message.val('');
+      } else if ($message.val() === "") {
+          console.log('no text!');
       } else {
-        alert('you must be logged in to do this!')
+          alert('you must be logged in to do this!');
       }
       return false;
     },
@@ -121,15 +128,16 @@ if (Meteor.isClient) {
         // optimize this so we don't have to do another lookup
         // don't add one because number branches returns lastBranchIndex + 1
         var nextBranch = Template.conversation.numberBranches();
-
+        var $message = $(e.target).siblings('.message-text').text();
         Messages.insert({
-          message: $(e.target).siblings('.message-text').text(),
+          message: $message,
           parentId: $(e.target).parent()[0].id,
           branchId: nextBranch,
           owner: Meteor.userId(), // 'true owner' of this duplicate is brancher, not necessarily orig message author
           // owner: $(e.target).siblings('.owner').val()       <-- this is optimal, but permissions don't allow it
+          branchName: $message.split(/\b/)[0],
           username: $(e.target).siblings('.username').text(), // copy over username instead of do lookup
-          timestamp: new Date});
+          timestamp: Date.now()});
         return false;
       }
     });
